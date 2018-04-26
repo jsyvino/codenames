@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "sdkVersion": "26.0.0",
+    "name": "codenames",
+    "icon": "./images/logo.png",
+    "orientation": "landscape",
+    "android": {
+			"package": "com.JSyvino.Codenames"
+		}
+  }
+}

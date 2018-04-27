@@ -15,14 +15,27 @@ const user = {
 const RootStack = StackNavigator({
     Home: { screen: Home },
     Login: { screen: Login },
-    Game: { screen: Game },
+    Game: { screen: Game,
+    navigationOptions: {
+        header: null
+    }
+    },
 },
     {
         initialRouteName: 'Home',
-    });
+    }
+);
 
 
 export default class App extends React.Component {
+
+    static navigationOptions = {
+        header: {
+            visible: false,
+        }
+    }
+
+
     constructor(props) {
         super(props);
         this.state = {

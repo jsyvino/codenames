@@ -26,7 +26,6 @@ module.exports = (io) => {
     });
 
     socket.on('updateScore', scoreData => {
-      console.log("SOCRE DATA HERE ------------", scoreData)
       gameInfo = scoreData
       gameInfo.reveal = false
       socket.broadcast.emit('updateScore', gameInfo);

@@ -4,8 +4,16 @@ import { StyleSheet, Text, View } from 'react-native';
 import CardList from './cardList'
 import SideBar from './sideBar'
 import socket from '../clientSocket'
+import { StackNavigator } from 'react-navigation';
 
 export default class Game extends React.Component {
+
+  static navigatorStyle = {
+    navBarBackgroundColor: 'blue',
+    navBarTranslucent: true,
+    navBarHidden: true
+  };
+
   constructor(props) {
     super(props)
     this.state = {

@@ -2,6 +2,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Col, Row, Grid } from "react-native-easy-grid";
+import socket from '../clientSocket'
 const Dimensions = require('Dimensions');
 const myWindow = Dimensions.get('window');
 
@@ -29,6 +30,8 @@ export default class CardList extends React.Component {
       })
       this.setState({
         cards: newCards
+      }, () => {
+        socket.emit('pickCard', newCards)
       })
     }
   }

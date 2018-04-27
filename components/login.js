@@ -21,6 +21,7 @@ export default class Login extends React.Component {
                     <LoginForm
                         setUser={this.props.setUser}
                         user={this.props.user}
+                        navigation={this.props.navigation}
                     />
                 </View>
             </View>

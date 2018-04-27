@@ -2,7 +2,7 @@ const Sequelize = require('sequelize')
 const db = require('../db')
 
 const Game = db.define('game', {
-  word: {
+  name: {
     type: Sequelize.STRING,
     defaultValue: null
   }

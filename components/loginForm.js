@@ -3,12 +3,45 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, KeyboardAvoidingView } from 'react-native';
 const Dimensions = require('Dimensions');
 const myWindow = Dimensions.get('window');
+import { StackNavigator } from 'react-navigation';
 
 export default class LoginForm extends React.Component {
 
-    loginUser = () => {
-        
+    constructor(props) {
+        super(props)
+        this.state = {
+            user: {
+                email: '',
+                password: ''
+            }
+        }
     }
+
+    loginUser = () => {
+        fetch('http://172.17.20.46:8080/auth/login', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+              },
+            body: JSON.stringify({
+                email: this.state.email,
+                password: this.state.password,
+            })
+        })
+            .then(res => res.json())
+            .then(user => {
+                console.log(user)
+                this.setState({
+                    user: user,
+                }, () => {
+                    this.props.navigation.navigate('Home', {
+                        user: user
+                    })
+                })
+            })
+    }
+
 
     render() {
         return (
@@ -21,17 +54,22 @@ export default class LoginForm extends React.Component {
                     keyboardType="email-address"
                     autoCapitalize="none"
                     autoCorrect={false}
+                    onChangeText={(text) => this.setState({email: text})}
                     style={styles.input}
                 />
                 <TextInput
                     placeholder="password"
                     placeholderTextColor="#16a085"
                     returnKeyType="go"
+                    autoCapitalize="none"
                     secureTextEntry
+                    onChangeText={(text) => this.setState({password: text})}
                     style={styles.input}
                     ref={(input) => this.passwordInput = input}
                 />
-                <TouchableOpacity style={styles.buttonContainer}>
+                <TouchableOpacity
+                    onPress={this.loginUser}
+                    style={styles.buttonContainer}>
                     <Text style={styles.buttonText}>LOGIN</Text>
                 </TouchableOpacity>
             </KeyboardAvoidingView>

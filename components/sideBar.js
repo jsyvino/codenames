@@ -49,6 +49,14 @@ export default class SideBar extends React.Component {
                     </Text>
                 </TouchableOpacity>
 
+                <TouchableOpacity
+                    style={buttonStyle.container}
+                    onPress={() => this.props.navigation.navigate('Home')}>
+                    <Text style={buttonStyle.text}>
+                        Exit
+                    </Text>
+                </TouchableOpacity>
+
             </View >
         );
     }

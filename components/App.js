@@ -3,7 +3,14 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import CardList from './cardList'
 import SideBar from './sideBar'
+import Login from './login'
+import Home from './home'
 import cards, { newBoard, words } from './words'
+
+const user = {
+  username: 'bobbidyBob',
+  email: 'bob@bob.com',
+}
 
 export default class App extends React.Component {
   state = {
@@ -14,7 +21,16 @@ export default class App extends React.Component {
     teamTurn: 'redTurn',
     reveal: false,
     cards: cards,
-    disableCards: false
+    disableCards: false,
+    user: {},
+    game: {},
+    codeMasters: []
+  }
+
+  setUser = (user) => {
+    this.setState({
+      user: user
+    })
   }
 
   revealPush = () => {
@@ -25,14 +41,20 @@ export default class App extends React.Component {
 
   newRound = () => {
     let newCards = newBoard(words);
-    this.setState({
-      remainingRed: 9,
-      remainingBlue: 8,
-      teamTurn: 'redTurn',
-      disableCards: false,
-      cards: newCards,
-      reveal: false
+    fetch('http://172.17.20.46:8080/api/cards')
+    .then(res => res.json())
+    .then(foundCards => {
+      console.log(foundCards)
+      this.setState({
+        remainingRed: 9,
+        remainingBlue: 8,
+        teamTurn: 'redTurn',
+        disableCards: false,
+        cards: foundCards,
+        reveal: false
+      })
     })
+
   }
 
   newGame = () => {
@@ -86,7 +108,18 @@ export default class App extends React.Component {
 
   render() {
     return (
+      <View>
+      {/*}
+      <Login
+        setUser={this.setUser}
+        user={this.state.user}
+        />
+      <Home
+        user={user}
+      />
+    */}
       <View style={styles.container}>
+
         <SideBar
           myState={this.state}
           revealPush={this.revealPush}
@@ -100,6 +133,8 @@ export default class App extends React.Component {
           cards={this.state.cards}
           disableCards={this.state.disableCards}
         />
+
+      </View>
       </View>
     );
   }

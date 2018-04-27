@@ -45,8 +45,8 @@ export default class CardList extends React.Component {
                 style={(card.selected || this.props.reveal) ? styles[card.color] : styles.unselected}
                 onPress={(evt) => this.selectCard(card)}>
 
-                <Text style={( (card.color === 'assasin' && card.selected) || card.selected) ? styles.assasinText : styles.cardText}>
-                  {(card.color === 'assasin' && (card.selected || this.props.reveal)) ? '💥' : card.word}
+                <Text style={( (card.color === 'assasin' && (card.selected || this.props.reveal)) || card.selected) ? styles.assasinText : styles.cardText}>
+                  {(card.color === 'assasin' && (card.selected || this.props.reveal)) ? `💥${card.word}💥` : card.word}
                 </Text>
               </TouchableOpacity>
             )
@@ -84,12 +84,10 @@ const styles = StyleSheet.create({
     fontStyle: 'italic'
   },
   unselected: {
-    borderColor: 'black',
-    borderWidth: 2,
     padding: 10,
     marginRight: 5,
     marginTop: 3,
-    backgroundColor: '#ffb3b3',
+    backgroundColor: 'white',
     alignItems: 'center',
     width: (myWindow.width - 20) / 5 - 5,
     height: (myWindow.height - 100) / 5 - 5,
@@ -130,14 +128,14 @@ const styles = StyleSheet.create({
     width: (myWindow.width - 20) / 5 - 5,
     height: (myWindow.height - 100) / 5 - 5,
   },
-  unselected: {
-    padding: 10,
-    marginRight: 5,
-    marginTop: 3,
-    backgroundColor: 'white',
-    alignItems: 'center',
-    width: (myWindow.width - 20) / 5 - 5,
-    height: (myWindow.height - 100) / 5 - 5,
-  }
+  // unselected: {
+  //   padding: 10,
+  //   marginRight: 5,
+  //   marginTop: 3,
+  //   backgroundColor: 'white',
+  //   alignItems: 'center',
+  //   width: (myWindow.width - 20) / 5 - 5,
+  //   height: (myWindow.height - 100) / 5 - 5,
+  // }
 })
 

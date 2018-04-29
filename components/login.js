@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Button, Image } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Button, Image, KeyboardAvoidingView } from 'react-native';
 import LoginForm from './loginForm'
 const Dimensions = require('Dimensions');
 const myWindow = Dimensions.get('window');
@@ -10,12 +10,11 @@ export default class Login extends React.Component {
     render() {
 
         return (
-            <View style={styles.container}>
+            <KeyboardAvoidingView behavior="padding" style={styles.container}>
                 <View style={styles.logoContainer}>
                     <Image
                         style={styles.logo}
                         source={require('../images/logo.png')} />
-                    <Text style={styles.logoText}>Start Playing Codenames!</Text>
                 </View>
                 <View style={styles.formContaner}>
                     <LoginForm
@@ -24,7 +23,7 @@ export default class Login extends React.Component {
                         navigation={this.props.navigation}
                     />
                 </View>
-            </View>
+            </KeyboardAvoidingView>
         )
     }
 }

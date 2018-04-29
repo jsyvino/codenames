@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Keyboard } from 'react-native';
 import socket from '../clientSocket'
 
 
@@ -19,12 +19,13 @@ export default class Home extends React.Component {
             reveal: false,
             cards: [],
             disableCards: false,
+            user: this.props.navigation.state.params.user
         }
     }
 
     componentDidMount() {
+        Keyboard.dismiss();
         socket.on('startGame', (gameInfo) => {
-            console.log("GETTING HERE, startgame in home", gameInfo)
             this.setState(gameInfo)
         })
         socket.on('joinGame', (gameInfo) => {
@@ -39,28 +40,21 @@ export default class Home extends React.Component {
     }
 
     render() {
-        // let params = this.props.navigation.state.params
+        console.log("PROPS HERE", this.props)
+        let params = this.props.navigation.state.params
         return (
             <View style={styles.container}>
                 <View style={styles.welcomeContainer}>
-                    <Text style={styles.welcome}>Welcome {"BOB" || params.user.username}!</Text>
+                    <Text style={styles.welcome}>Welcome {this.state.user.username}!</Text>
                 </View>
-                <TextInput
-                    placeholder="new game"
-                    placeholderTextColor="#16a085"
-                    returnKeyType="next"
-                    onSubmitEditing={() => this.passwordInput.focus()}
-                    keyboardType="email-address"
-                    onChangeText={(text) => this.setState({ game: text })}
-                    style={styles.input}
-                />
+
                 {
                     !this.state.game ?
                         <TouchableOpacity
                             onPress={() => {
                                 socket.emit('startGame', this.state)
                                 this.props.navigation.navigate('Game', {
-                                    user: "BOB",
+                                    user: this.state.user,
                                     newGame: true
                                 })
                             }
@@ -72,7 +66,7 @@ export default class Home extends React.Component {
                         <TouchableOpacity
                             onPress={() => {
                                 this.props.navigation.navigate('Game', {
-                                    user: "SAM" || params.user,
+                                    user: this.state.user,
                                 })
                             }
                             }
@@ -80,7 +74,15 @@ export default class Home extends React.Component {
                             <Text style={styles.buttonText}>Join Game</Text>
                         </TouchableOpacity>
                 }
-
+                {/*}
+                <TouchableOpacity
+                    onPress={() => {
+                        params.logoutUser() 
+                    }}
+                    style={styles.buttonContainer}>
+                    <Text style={styles.buttonText}>LOGOUT</Text>
+                </TouchableOpacity>
+                */}
                 <View style={styles.formContaner}>
                 </View>
             </View >
@@ -93,23 +95,31 @@ const styles = StyleSheet.create({
         flex: 1,
         display: 'flex',
         backgroundColor: '#1abc9c',
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     welcomeContainer: {
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: 40
+        marginBottom: 20,
     },
     welcome: {
         color: 'white',
         marginTop: 10,
-        fontSize: 26,
+        fontSize: 34,
     },
     buttonContainer: {
         backgroundColor: '#16a085',
-        paddingVertical: 15
+        paddingVertical: 15,
+        width: 130,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 15,
     },
-    logo: {
-        width: 120,
-        height: 120
-    },
+    buttonText: {
+        fontSize: 20,
+        fontWeight: '600',
+        color: 'white',
+        opacity: 0.8
+    }
 })

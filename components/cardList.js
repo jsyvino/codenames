@@ -1,15 +1,30 @@
 // @flow
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from 'react-native';
 import { Col, Row, Grid } from "react-native-easy-grid";
 import socket from '../clientSocket'
-const Dimensions = require('Dimensions');
-const myWindow = Dimensions.get('window');
+const Dim = require('Dimensions');
+const myWindow = Dim.get('window');
+let cardWidth = (Dim.get('window').width > Dim.get('window').height) ? (Dim.get('window').width - 20) / 5 - 5 : (Dim.get('window').height - 20) / 5 - 5
+let cardHeight = (Dim.get('window').width > Dim.get('window').height) ? (Dim.get('window').height - 100) / 5 - 5 : (Dim.get('window').width - 100) / 5 - 5
 
 export default class CardList extends React.Component {
-  state = {
-    cards: this.props.cards
-  }
+  constructor(props) {
+    super(props)
+    this.state = {
+      cards: this.props.cards,
+      orientation: Dim.get('window').height > Dim.get('window').width ? "portrait" : "landscape",
+    } 
+}
+
+componentDidMount () {
+  Dimensions.addEventListener('change', () => {
+    let orientation = Dim.get('window').height > Dim.get('window').width ? "portrait" : "landscape"
+    this.setState({
+      orientation: orientation
+    });
+  })
+}
 
   componentWillReceiveProps(nextProps) {
     if (this.props.cards !== nextProps.cards) {
@@ -38,7 +53,15 @@ export default class CardList extends React.Component {
 
 
   render() {
-    return (
+    let orientation = this.state.orientation
+    return ( 
+      <View>
+      {
+        orientation === 'portrait' ?
+        <View style={styles.rotate}>
+        <Text style={styles.rotateText}>Please rotate your screen to play</Text>
+        </View>
+        :
       <View style={styles.container}>
         {
           this.state.cards.map(card => {
@@ -48,7 +71,7 @@ export default class CardList extends React.Component {
                 style={(card.selected || this.props.reveal) ? styles[card.color] : styles.unselected}
                 onPress={(evt) => this.selectCard(card)}>
 
-                <Text style={( (card.color === 'assasin' && (card.selected || this.props.reveal)) || card.selected) ? styles.assasinText : styles.cardText}>
+                <Text style={((card.color === 'assasin' && (card.selected || this.props.reveal)) || card.selected) ? styles.assasinText : styles.cardText}>
                   {(card.color === 'assasin' && (card.selected || this.props.reveal)) ? `💥${card.word}💥` : card.word}
                 </Text>
               </TouchableOpacity>
@@ -56,6 +79,8 @@ export default class CardList extends React.Component {
           })
         }
       </View>
+    }
+    </View>
     );
   }
 }
@@ -86,59 +111,64 @@ const styles = StyleSheet.create({
     textAlignVertical: 'center',
     fontStyle: 'italic'
   },
-  unselected: {
-    padding: 10,
-    marginRight: 5,
-    marginTop: 3,
-    backgroundColor: 'white',
-    alignItems: 'center',
-    width: (myWindow.width - 20) / 5 - 5,
-    height: (myWindow.height - 100) / 5 - 5,
-  },
-  red: {
-    padding: 10,
-    marginRight: 5,
-    marginTop: 3,
-    backgroundColor: '#ffb3b3',
-    alignItems: 'center',
-    width: (myWindow.width - 20) / 5 - 5,
-    height: (myWindow.height - 100) / 5 - 5,
-  },
-  blue: {
-    padding: 10,
-    marginRight: 5,
-    marginTop: 3,
-    backgroundColor: '#b3d1ff',
-    alignItems: 'center',
-    width: (myWindow.width - 20) / 5 - 5,
-    height: (myWindow.height - 100) / 5 - 5,
-  },
-  assasin: {
-    padding: 10,
-    marginRight: 5,
-    marginTop: 3,
-    backgroundColor: 'black',
-    alignItems: 'center',
-    width: (myWindow.width - 20) / 5 - 5,
-    height: (myWindow.height - 100) / 5 - 5,
-  },
-  bystander: {
-    padding: 10,
-    marginRight: 5,
-    marginTop: 3,
-    backgroundColor: '#ffc266',
-    alignItems: 'center',
-    width: (myWindow.width - 20) / 5 - 5,
-    height: (myWindow.height - 100) / 5 - 5,
-  },
-  // unselected: {
-  //   padding: 10,
-  //   marginRight: 5,
-  //   marginTop: 3,
-  //   backgroundColor: 'white',
-  //   alignItems: 'center',
-  //   width: (myWindow.width - 20) / 5 - 5,
-  //   height: (myWindow.height - 100) / 5 - 5,
-  // }
+    unselected: {
+      padding: 10,
+      marginRight: 5,
+      marginTop: 3,
+      backgroundColor: 'white',
+      alignItems: 'center',
+      width: cardWidth,
+      height: cardHeight,
+    },
+    red: {
+      padding: 10,
+      marginRight: 5,
+      marginTop: 3,
+      backgroundColor: '#ffb3b3',
+      alignItems: 'center',
+      width: cardWidth,
+      height: cardHeight,
+    },
+    blue: {
+      padding: 10,
+      marginRight: 5,
+      marginTop: 3,
+      backgroundColor: '#b3d1ff',
+      alignItems: 'center',
+      width: cardWidth,
+      height: cardHeight,
+    },
+    assasin: {
+      padding: 10,
+      marginRight: 5,
+      marginTop: 3,
+      backgroundColor: 'black',
+      alignItems: 'center',
+      width: cardWidth,
+      height: cardHeight,
+    },
+    bystander: {
+      padding: 10,
+      marginRight: 5,
+      marginTop: 3,
+      backgroundColor: '#ffc266',
+      alignItems: 'center',
+      width: cardWidth,
+      height: cardHeight,
+    },
+    rotate: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: '#bdc3c7',
+      height: myWindow.height > myWindow.width ? myWindow.height : myWindow.width,
+      width: myWindow.width < myWindow.height ? myWindow.width : myWindow.height
+    },
+    rotateText: {
+      color: '#9b59b6',
+      fontSize: 40,
+      fontWeight: '800',
+      textAlign: 'center'
+    }
+
 })
 

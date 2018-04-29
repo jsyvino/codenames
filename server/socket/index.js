@@ -16,7 +16,7 @@ module.exports = (io) => {
       gameInfo = gameState
       gameInfo.reveal = false
       gameInfo.game = true;
-      console.log(gameState)
+      console.log("START GAME", gameInfo)
       socket.broadcast.emit('startGame', gameInfo);
     });
 
@@ -26,9 +26,33 @@ module.exports = (io) => {
     });
 
     socket.on('updateScore', scoreData => {
+      gameInfo = {
+        remainingRed: scoreData.remainingRed,
+        remainingBlue: scoreData.remainingBlue,
+        redScore: scoreData.redScore,
+        blueScore: scoreData.blueScore,
+        teamTurn: scoreData.teamTurn,
+        cards: scoreData.cards
+      }
+      socket.broadcast.emit('updateScore', gameInfo);
+    });
+
+    socket.on('blueWin', scoreData => {
       gameInfo = scoreData
       gameInfo.reveal = false
-      socket.broadcast.emit('updateScore', gameInfo);
+      socket.broadcast.emit('blueWin', gameInfo);
+    });
+
+    socket.on('redWin', scoreData => {
+      gameInfo = scoreData
+      gameInfo.reveal = false
+      socket.broadcast.emit('redWin', gameInfo);
+    });
+
+    socket.on('newRound', scoreData => {
+      gameInfo = scoreData
+      gameInfo.reveal = false
+      socket.broadcast.emit('newRound', gameInfo);
     });
 
     socket.on('disconnect', () => {

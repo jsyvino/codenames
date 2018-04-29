@@ -13,16 +13,27 @@ const user = {
 }
 
 const RootStack = StackNavigator({
-    Home: { screen: Home },
-    Login: { screen: Login },
-    Game: { screen: Game,
-    navigationOptions: {
-        header: null
-    }
+    Home: {
+        screen: Home,
+        navigationOptions: {
+            header: null
+        }
+    },
+    Login: {
+        screen: Login,
+        navigationOptions: {
+            header: null
+        }
+    },
+    Game: {
+        screen: Game,
+        navigationOptions: {
+            header: null
+        }
     },
 },
     {
-        initialRouteName: 'Home',
+        initialRouteName: 'Login',
     }
 );
 

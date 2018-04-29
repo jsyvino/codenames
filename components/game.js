@@ -1,18 +1,13 @@
 // @flow
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Keyboard } from 'react-native';
 import CardList from './cardList'
 import SideBar from './sideBar'
 import socket from '../clientSocket'
 import { StackNavigator } from 'react-navigation';
 
-export default class Game extends React.Component {
 
-  static navigatorStyle = {
-    navBarBackgroundColor: 'blue',
-    navBarTranslucent: true,
-    navBarHidden: true
-  };
+export default class Game extends React.Component {
 
   constructor(props) {
     super(props)
@@ -25,13 +20,14 @@ export default class Game extends React.Component {
       reveal: false,
       cards: [],
       disableCards: false,
-      user: this.props.user,
+      user: this.props.navigation.state.params.user
     }
   }
 
   componentDidMount() {
+    Keyboard.dismiss();
     socket.on('pickCards', (gameInfo) => {
-      this.setState( gameInfo )
+      this.setState(gameInfo)
     })
     socket.on('updateScore', (gameInfo) => {
       this.setState(gameInfo)
@@ -39,8 +35,21 @@ export default class Game extends React.Component {
     socket.on('joinGame', (gameInfo) => {
       this.setState(gameInfo)
     })
+    socket.on('newRound', (gameInfo) => {
+      this.setState(gameInfo)
+    })
+    socket.on('blueWin', (gameInfo) => {
+      this.setState(gameInfo)
+      alert("Blue Team Wins!")
+    })
+    socket.on('redWin', (gameInfo) => {
+      this.setState(gameInfo)
+      alert("Red Team Wins!")
+    })
+
     if (this.props.navigation.state.params.newGame) {
-      fetch('http://172.17.20.46:8080/api/cards')
+      // fetch('http://172.17.20.46:8080/api/cards')   //fullstack
+      fetch('http://192.168.1.77:8080/api/cards')   //home
         .then(res => res.json())
         .then(foundCards => {
           this.setState({
@@ -50,7 +59,6 @@ export default class Game extends React.Component {
         })
     }
     else {
-      console.log("game already started?")
       socket.emit('joinGame')
     }
   }
@@ -66,7 +74,8 @@ export default class Game extends React.Component {
   }
 
   newRound = () => {
-    fetch('http://172.17.20.46:8080/api/cards')
+    // fetch('http://172.17.20.46:8080/api/cards')   //fullstack
+    fetch('http://192.168.1.77:8080/api/cards')   //home
       .then(res => res.json())
       .then(foundCards => {
         this.setState({
@@ -76,7 +85,7 @@ export default class Game extends React.Component {
           disableCards: false,
           cards: foundCards,
           reveal: false
-        })
+        }, () => socket.emit('newRound', this.state))
       })
 
   }
@@ -93,14 +102,18 @@ export default class Game extends React.Component {
       this.setState({
         redScore: this.state.redScore + 1,
         disableCards: true
-      }, () => socket.emit('updateScore', this.state))
-      alert("Red Team Wins!")
+      }, () => {
+        alert("Red Team Wins!")
+        socket.emit('redWin', this.state)
+      })
     } else {
       this.setState({
         blueScore: this.state.blueScore + 1,
         disableCards: true
-      }, () => socket.emit('updateScore', this.state))
-      alert("Blue Team Wins!")
+      }, () => {
+        alert("Blue Team Wins!")
+        socket.emit('blueWin', this.state)
+      })
     }
   }
 
@@ -133,7 +146,7 @@ export default class Game extends React.Component {
   }
 
   render() {
-    console.log(this.state)
+    console.log("INSIDE GAME", this.props.navigation.state)
     return (
       <View>
         <SideBar
@@ -143,6 +156,7 @@ export default class Game extends React.Component {
           newRound={this.newRound}
           newGame={this.newGame}
           navigation={this.props.navigation}
+          user={this.state.user}
         />
         <CardList
           scorePoint={this.scorePoint}

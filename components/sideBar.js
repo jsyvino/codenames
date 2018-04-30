@@ -75,7 +75,6 @@ export default class SideBar extends React.Component {
                             <TouchableOpacity
                                 style={buttonStyle.container}
                                 onPress={() => {
-                                    console.log("INSIDE SIDEBAR", this.props)
                                     this.props.navigation.navigate('Home', {
                                         user: this.state.user,
                                     })

@@ -48,8 +48,8 @@ export default class Game extends React.Component {
     })
 
     if (this.props.navigation.state.params.newGame) {
-      // fetch('http://172.17.20.46:8080/api/cards')   //fullstack
-      fetch('http://192.168.1.77:8080/api/cards')   //home
+      fetch('http://172.17.20.46:8080/api/cards')   //fullstack
+      // fetch('http://192.168.1.77:8080/api/cards')   //home
         .then(res => res.json())
         .then(foundCards => {
           this.setState({
@@ -74,8 +74,8 @@ export default class Game extends React.Component {
   }
 
   newRound = () => {
-    // fetch('http://172.17.20.46:8080/api/cards')   //fullstack
-    fetch('http://192.168.1.77:8080/api/cards')   //home
+    fetch('http://172.17.20.46:8080/api/cards')   //fullstack
+    // fetch('http://192.168.1.77:8080/api/cards')   //home
       .then(res => res.json())
       .then(foundCards => {
         this.setState({
@@ -144,9 +144,9 @@ export default class Game extends React.Component {
       }
     }
   }
+  
 
   render() {
-    console.log("INSIDE GAME", this.props.navigation.state)
     return (
       <View>
         <SideBar

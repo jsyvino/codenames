@@ -41,6 +41,7 @@ export default class Home extends React.Component {
 
     render() {
         console.log("PROPS HERE", this.props)
+        console.log("STATE HERE", this.state)
         let params = this.props.navigation.state.params
         return (
             <View style={styles.container}>

@@ -20,8 +20,8 @@ export default class LoginForm extends React.Component {
     }
 
     loginUser = () => {
-        // fetch('http://172.17.20.46:8080/auth/login', {     //fullstack
-        fetch('http://192.168.1.77:8080/auth/login', {     //home
+        fetch('http://172.17.20.46:8080/auth/login', {     //fullstack
+        // fetch('http://192.168.1.77:8080/auth/login', {     //home
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -45,8 +45,8 @@ export default class LoginForm extends React.Component {
             })
     }
     signUpUser = () => {
-        // fetch('http://172.17.20.46:8080/auth/login', {     //fullstack
-        fetch('http://192.168.1.77:8080/auth/signup', {     //home
+        fetch('http://172.17.20.46:8080/auth/signup', {     //fullstack
+        // fetch('http://192.168.1.77:8080/auth/signup', {     //home
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -72,7 +72,6 @@ export default class LoginForm extends React.Component {
     }
 
     logoutUser = () => {
-        console.log("getting here on logout????")
         this.setState({
             user: {},
         }, () => this.props.navigation.navigate('Login'))

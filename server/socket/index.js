@@ -16,7 +16,6 @@ module.exports = (io) => {
       gameInfo = gameState
       gameInfo.reveal = false
       gameInfo.game = true;
-      console.log("START GAME", gameInfo)
       socket.broadcast.emit('startGame', gameInfo);
     });
 
